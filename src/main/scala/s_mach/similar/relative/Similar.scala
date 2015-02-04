@@ -1,4 +1,5 @@
-package s_mach.similar
+package s_mach.similar.relative
+
 import breeze.linalg._
 
 /**
@@ -6,7 +7,7 @@ import breeze.linalg._
  *
  * @tparam A type
  */
-trait CanSimilar[A] {
+trait Similar[A] {
 
   /**
    * Compares two A's for similarity and returns a Double between 0.0 and 1.0
@@ -19,6 +20,7 @@ trait CanSimilar[A] {
    */
   def similar(a1: A, a2: A) : Double
 
+
   /**
    * Computes the similarity matrix of 2 vectors such that
    * Matrix(i,j) == similar(ma1(i), ma2(j))
@@ -27,12 +29,12 @@ trait CanSimilar[A] {
    * @param ma2 Vector of A's
    * @return Similarity Matrix
    */
-  def cartesianProduct(ma1: Vector[A], ma2: Vector[A]) : DenseMatrix[Double] = {
+  def cartesianProduct(ma1: DenseVector[A], ma2: DenseVector[A]) : DenseMatrix[Double] = {
     val matrix = new DenseMatrix[Double](ma1.length, ma2.length)
     for(r <- 0 until ma1.length;
         c <- 0 to (r * ma2.length/ma1.length)) {
-      matrix(r,c) = similar(ma1(r), ma2(c))
-      matrix(c,r) = matrix(r,c)
+        matrix(r,c) = similar(ma1(r), ma2(c))
+        matrix(c,r) = matrix(r,c)
     }
     matrix
   }
@@ -44,12 +46,14 @@ trait CanSimilar[A] {
    * @param ma Vector of A's
    * @return Similarity Matrix
    */
-  def selfCartesianProduct(ma: Vector[A]) : DenseMatrix[Double] = {
+  def selfCartesianProduct(ma: DenseVector[A]) : DenseMatrix[Double] = {
     val matrix = new DenseMatrix[Double](ma.length, ma.length)
     for(r <- 0 until ma.length;
         c <- 0 to r) {
-      matrix(r,c) = similar(ma(r), ma(c))
-      matrix(c,r) = matrix(r,c)
+      if(r == c) matrix(r,c) = 1.0 else {
+        matrix(r,c) = similar(ma(r), ma(c))
+        matrix(c,r) = matrix(r,c)
+      }
     }
     matrix
   }
