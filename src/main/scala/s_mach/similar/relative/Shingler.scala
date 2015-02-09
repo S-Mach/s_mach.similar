@@ -70,11 +70,12 @@ object Shingler {
 
   def forWordgrams(
     k_range: Range,
-    toWords: String => IndexedSeq[String]
+    toWords: String => IndexedSeq[String],
+    sep: String = "|"
   ) : Shingler[String,String] = ShinglerImpl[String,IndexedSeq[String],String](
     k_range = k_range,
     toGrams = toWords,
     gramsSize = _.size,
-    sliceGrams = (s,i,j) => s.slice(i,j).mkString
+    sliceGrams = (s,i,j) => s.slice(i,j).mkString(sep)
   )
 }
