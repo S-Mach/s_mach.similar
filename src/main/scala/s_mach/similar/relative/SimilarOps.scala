@@ -26,6 +26,8 @@ object SimilarOps {
         if (a1 eq a2) {
           1.0
         } else if (isEmpty(a1) || isEmpty(a2)) {
+          // TODO: what if they are both empty?
+          // TODO: also, if dist can empty a1 & a2 does this short circuit really help?
           0.0
         } else {
           val max = maxDistance(a1, a2)
@@ -81,34 +83,22 @@ object SimilarOps {
    * Creates a Similar[A] based on a Shingler[A,S]
    *
    * @param shingler
-   * @param randomSeed
    * @tparam A
    * @tparam S
-   * @return
+   * @return Similar[A] that uses the jaccard index on shingle sets to compute
+   *         similarity
    */
-  def simByShingler[A, S](shingler : Shingler[A, S],
-                          randomSeed : Int = 0x0BEEFDAD) : Similar[A] = {
+  def simByShingler[A, S](shingler : Shingler[A, S]) : Similar[A] =
     new Similar[A] {
 
       override def similar(a1: A, a2: A): Double = {
-        val shingleA = shingler.shingle(a1)
-        val shingleB = shingler.shingle(a2)
-        if (shingleA.isEmpty || shingleB.isEmpty) 0.0
-        else {
-          val hashFunctions = Math.max(shingleA.length, shingleB.length) / 2
-          val rand = new Random(randomSeed) //need same sequence of randoms each time, close over seed
-          val hashes: IndexedSeq[S => Int] = Range(0, hashFunctions)
-              .map(_ => rand.nextInt(Integer.MAX_VALUE))
-              .map(i => (s: S) => s.hashCode() ^ i)
-          hashes
-            .map((h: S => Int) => (shingleA.map(h).min, shingleB.map(h).min))
-            .count{case (min1, min2) => min1 == min2}.toDouble / hashFunctions
-        }
+        val shingleA = shingler.shingle(a1).toSet
+        val shingleB = shingler.shingle(a2).toSet
+
+        (shingleA intersect shingleB).size.toDouble /
+          (shingleA union shingleB).size
       }
+
     }
-
-  }
-
-
 
 }

@@ -135,7 +135,7 @@ package object similar {
       canSimilar.similar(self, rhs)
     }
 
-    def shingle[S](implicit shingler: Shingler[A,S]) : List[S] = {
+    def shingle[S](implicit shingler: Shingler[A,S]) : Traversable[S] = {
       shingler.shingle(self)
     }
 
@@ -147,9 +147,5 @@ package object similar {
       metric position self
     }
 
-  }
-
-  implicit class SMach_Similar_PimpMyIterable[A](val self: Iterator[A]) extends AnyVal {
-    def ksliding(k_range: Range) = k_range.iterator.flatMap(self.sliding(_,1))
   }
 }
