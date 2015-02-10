@@ -15,7 +15,7 @@ package s_mach.similar.relative
  */
 trait Shingler[A,Shingle] {
   /** @return the set of shingles that describe the instance */
-  def shingle(a: A): ShingleSet[Shingle]
+  def shingle(a: A): Stream[Shingle]
 }
 
 object Shingler {
@@ -37,21 +37,22 @@ object Shingler {
     gramsSize: Grams => Int,
     sliceGrams: (Grams,Int,Int) => Shingle
   ) extends Shingler[A,Shingle] {
-    override def shingle(a: A): ShingleSet[Shingle] = {
-      new ShingleSet[Shingle] {
-        override def foreach[U](f: Shingle => U): Unit = {
-          val grams = toGrams(a)
-          val maxIndex = gramsSize(grams) - 1
-          val maxEndIndex = maxIndex + 1
-          k_range.foreach { k =>
-            var i = 0
-            while(i <= maxIndex && i + k <= maxEndIndex) {
-              f(sliceGrams(grams,i,i+k))
-              i = i + 1
-            }
+    override def shingle(a: A): Stream[Shingle] = {
+      val grams = toGrams(a)
+      val maxIndex = gramsSize(grams) - 1
+      val maxEndIndex = maxIndex + 1
+      def loop(k: Int, i: Int) : Stream[Shingle] = {
+        if(i <= maxIndex && i + k <= maxEndIndex) {
+          sliceGrams(grams,i,i+k) #:: loop(k,i+1)
+        } else {
+          if(k < k_range.end) {
+            loop(k+1,0)
+          } else {
+            Stream.empty
           }
         }
       }
+      loop(k_range.start,0)
     }
   }
 
@@ -60,10 +61,10 @@ object Shingler {
    * @param k_range the range of the number of sequential
    * @return
    */
-  def forChargrams(k_range: Range) : Shingler[String,String] =
+  def forChargrams(k_range: Range, toLowerCase: Boolean = true) : Shingler[String,String] =
     ShinglerImpl[String,String,String](
       k_range = k_range,
-      toGrams = { s => s },
+      toGrams = if(toLowerCase) { s => s.toLowerCase} else { s => s },
       gramsSize = _.length,
       sliceGrams = (s,i,j) => s.substring(i,j)
     )
