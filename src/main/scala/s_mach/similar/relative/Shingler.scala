@@ -78,4 +78,14 @@ object Shingler {
     gramsSize = _.size,
     sliceGrams = (s,i,j) => s.slice(i,j).mkString(sep)
   )
+
+  def apply[A,Gram](
+    k_range: Range,
+    toGrams: A => IndexedSeq[Gram]
+  ) : Shingler[A,IndexedSeq[Gram]] = ShinglerImpl[A,IndexedSeq[Gram],IndexedSeq[Gram]](
+    k_range = k_range,
+    toGrams = toGrams,
+    gramsSize = _.size,
+    sliceGrams = (grams,i,j) => grams.slice(i,j)
+  )
 }
