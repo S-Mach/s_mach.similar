@@ -15,7 +15,7 @@ package s_mach.similar.relative
  */
 trait Shingler[A,Shingle] {
   /** @return the set of shingles that describe the instance */
-  def shingle(a: A): Stream[Shingle]
+  def shingle(a: A): ShingleSet[Shingle]
 }
 
 object Shingler {
@@ -37,7 +37,7 @@ object Shingler {
     gramsSize: Grams => Int,
     sliceGrams: (Grams,Int,Int) => Shingle
   ) extends Shingler[A,Shingle] {
-    override def shingle(a: A): Stream[Shingle] = {
+    override def shingle(a: A): ShingleSet[Shingle] = {
       val grams = toGrams(a)
       val maxIndex = gramsSize(grams) - 1
       val maxEndIndex = maxIndex + 1
@@ -52,7 +52,7 @@ object Shingler {
           }
         }
       }
-      loop(k_range.start,0)
+      ShingleSet(loop(k_range.start,0))
     }
   }
 

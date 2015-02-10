@@ -135,9 +135,9 @@ package object similar {
       canSimilar.similar(self, rhs)
     }
 
-    def shingle[S](implicit shingler: Shingler[A,S]) : Traversable[S] = {
-      shingler.shingle(self)
-    }
+//    def shingle[S](implicit shingler: Shingler[A,S]) : Traversable[S] = {
+//      shingler.shingle(self)
+//    }
 
     def distance(rhs: A)(implicit metric : Metric[A]) = {
       metric.distance(self, rhs)
