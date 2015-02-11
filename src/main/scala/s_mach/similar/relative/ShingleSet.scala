@@ -29,6 +29,7 @@ object ShingleSet {
         val shingleA = a1.toSet
         val shingleB = a2.toSet
 
+        // Jaccard index
         (shingleA intersect shingleB).size.toDouble /
           (shingleA union shingleB).size
       }

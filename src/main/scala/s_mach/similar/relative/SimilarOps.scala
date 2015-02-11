@@ -74,31 +74,4 @@ object SimilarOps {
       dist,
       _.isEmpty)
   }
-
-
-
-
-
-  /**
-   * Creates a Similar[A] based on a Shingler[A,S]
-   *
-   * @param shingler
-   * @tparam A
-   * @tparam S
-   * @return Similar[A] that uses the jaccard index on shingle sets to compute
-   *         similarity
-   */
-  def simByShingler[A, S](shingler : Shingler[A, S]) : Similar[A] =
-    new Similar[A] {
-
-      override def similar(a1: A, a2: A): Double = {
-        val shingleA = shingler.shingle(a1).toSet
-        val shingleB = shingler.shingle(a2).toSet
-
-        (shingleA intersect shingleB).size.toDouble /
-          (shingleA union shingleB).size
-      }
-
-    }
-
 }

@@ -8,11 +8,13 @@ class SMach_Similar_ShinglerTests extends FlatSpec with Matchers {
   "Shingler.forChargrams" should "create a shingler that shingles strings with lower case char grams by default" in {
     val s = Shingler.forChargrams(2 to 3)
     s.shingle("aBcd").shingles should equal(Set("ab","bc","cd","abc","bcd"))
+    s.shingle("").shingles should equal(Set())
   }
 
   "Shingler.forChargrams" should "create a shingler that shingles strings with case sensitive char grams when selected" in {
     val s = Shingler.forChargrams(2 to 3,toLowerCase = false)
     s.shingle("aBcd").shingles should equal(Set("aB","Bc","cd","aBc","Bcd"))
+    s.shingle("").shingles should equal(Set())
   }
 
   "Shingler.forWordgrams" should "create a shingler that shingles strings with word grams" in {
@@ -25,9 +27,10 @@ class SMach_Similar_ShinglerTests extends FlatSpec with Matchers {
       "rar|smash|house",
       "smash|house|good"
     ))
+    s.shingle("").shingles should equal(Set())
   }
 
-  "Shingler.apply" should "create a shingler that shingles a type with grams" in {
+  "Shingler.apply" should "create a shingler that shingles any type with any gram type" in {
     val s = Shingler[IndexedSeq[Int],Int](2 to 3, v => v)
     s.shingle(Vector(1,2,3,4)).shingles should equal(Set(
       IndexedSeq(1,2),
@@ -36,6 +39,7 @@ class SMach_Similar_ShinglerTests extends FlatSpec with Matchers {
       IndexedSeq(1,2,3),
       IndexedSeq(2,3,4)
     ))
+    s.shingle(Vector.empty).shingles should equal(Set())
   }
 
   "Shingler" should "be composeable" in {
