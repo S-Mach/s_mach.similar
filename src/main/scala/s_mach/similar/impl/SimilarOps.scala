@@ -160,8 +160,7 @@ object SimilarOps {
   def simCentroid[A](
     self: IndexedSeq[A]
   )(implicit
-    similar : Similar[A],
-    aClassTag : ClassTag[A]
+    similar : Similar[A]
   ) : A =
     self(
       sum(self.selfCartesianProduct, Axis._1)
@@ -176,7 +175,40 @@ object SimilarOps {
   )(
     f: A => K
   )(implicit
-    similar:Similar[K]
-  ) : Map[K, IndexedSeq[A]] = ???
+    similar: Similar[K]
+  ) : Map[K, IndexedSeq[A]] = {
+    val keys = self.map(f)
+    val keySim = keys.selfCartesianProduct
+    val builder = mutable.Map.empty[K, mutable.Builder[A,IndexedSeq[A]]]
+
+    // Scan all indexes smaller than the current row for the lowest index that
+    // exceeds the threshold and accumulate the value to the builder for the
+    // corresponding key. Row 0 will always just be added to builder
+    // corresponding to its key. Rows after 0 will either accumulate to a
+    // previous row's builder (if their key similarity is greater or equal to
+    // threshold) or will start a new builder correspoding to their key
+    for(row <- self.indices) {
+      var min_j = row
+      var j = 0
+      while(j < row && j < min_j) {
+        if(keySim(row,j) >= threshold) {
+          min_j = j
+        }
+        j = j + 1
+      }
+      val a = self(row)
+      val key = keys(min_j)
+      builder.get(key) match {
+        case Some(aBuilder) =>
+          aBuilder += a
+        case None =>
+          val aBuilder = IndexedSeq.newBuilder[A]
+          aBuilder += a
+          builder.put(key, aBuilder)
+      }
+    }
+
+    builder.mapValues(_.result()).toMap
+  }
 
 }

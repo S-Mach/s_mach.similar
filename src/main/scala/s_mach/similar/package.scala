@@ -14,16 +14,14 @@ package object similar {
     ): DenseVector[A] = DenseVector[A](self.toArray)
 
     def selfCartesianProduct(implicit
-      similar: Similar[A],
-      aClassTag: ClassTag[A]
+      similar: Similar[A]
     ): DenseMatrix[Double] =
       similar.selfCartesianProduct(self)
 
     def cartesianProduct(
       other: IndexedSeq[A]
     )(implicit
-      similar: Similar[A],
-      aClassTag: ClassTag[A]
+      similar: Similar[A]
     ): DenseMatrix[Double] =
       similar.cartesianProduct(self, other)
 
@@ -33,8 +31,7 @@ package object similar {
      * @return A most similar to all other A's
      */
     def simCentroid(implicit
-      similar: Similar[A],
-      aClassTag: ClassTag[A]
+      similar: Similar[A]
     ): A = SimilarOps.simCentroid(self)
 
     def simGroupBy[K](

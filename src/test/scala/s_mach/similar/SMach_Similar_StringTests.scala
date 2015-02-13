@@ -40,4 +40,15 @@ class SMach_Similar_StringTests extends FlatSpec with Matchers {
   "simCentroid" should "find the element most like others" in {
     Vector("hello", "hi", "hey", "hi", "helo", "hi").simCentroid should equal ("hi")
   }
+
+  "simGroupBy" should "group members most like others" in {
+    Vector("hello", "hi", "hey", "hi", "helo", "hi","hell","hlelo")
+      .simGroupBy(0.6)(v => v) should equal(
+        Map(
+          "hey" -> Vector("hey"),
+          "hi" -> Vector("hi", "hi", "hi"),
+          "hello" -> Vector("hello", "helo", "hell", "hlelo")
+        )
+      )
+  }
 }
