@@ -5,7 +5,9 @@ import s_mach.similar.impl.ShingleOps
 import impl.ShingleOps._
 
 package object shingle {
-  type Shingler[A,Shingle] = A => TraversableOnce[Shingle]
+  // Note: shingler must return a collection that can be traversed multiple
+  // times for efficient cartesian product calc
+  type Shingler[A,Shingle] = A => Traversable[Shingle]
 
   type WeightedShingle[A] = (A,Int)
   type TypedWeightedShingle[A] = (Symbol,A,Int)

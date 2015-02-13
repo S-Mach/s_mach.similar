@@ -4,7 +4,7 @@ import org.scalatest.{FlatSpec, Matchers}
 import s_mach.similar.shingle._
 
 class SMach_Similar_SimilarByFeaturesTest extends FlatSpec with Matchers {
-  val shingler = (_:String).charShingles(2 to 3)
+  val shingler = (_:String).charShingles(2 to 3).toIndexedSeq
   import JaccardIndex._
   implicit val sim = SimilarByFeatures(shingler)
   "SimilarByFeatures with Shingler" should "compute similarity based on the shingle set" in {
