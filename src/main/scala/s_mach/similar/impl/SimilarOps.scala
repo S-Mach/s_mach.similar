@@ -23,16 +23,18 @@ object SimilarOps {
    * @tparam A An A
    * @return Similar[A] for similarity comparison
    */
-  def simByDistanceThresholdRefs[A <: AnyRef](maxDistance : (A,A) => Double,
-                                          dist : (A,A) => Double,
-                                          isEmpty : A => Boolean): Similar[A] = {
+  def simByDistanceThresholdRefs[A <: AnyRef](
+    maxDistance : (A,A) => Double,
+    dist : (A,A) => Double,
+    isEmpty : A => Boolean
+  ): Similar[A] = {
     new Similar[A] {
       override def similar(a1: A, a2: A): Double = {
         if (a1 eq a2) {
           1.0
         } else if (isEmpty(a1) || isEmpty(a2)) {
           // TODO: what if they are both empty?
-          // TODO: also, if dist can empty a1 & a2 does this short circuit really help?
+          // TODO: also, if dist can correctly sim for empty a1 & a2 does this short circuit really help?
           0.0
         } else {
           val max = maxDistance(a1, a2)
@@ -55,8 +57,10 @@ object SimilarOps {
    * @tparam A An A
    * @return Similar[A] for similarity comparison
    */
-  def simByDistanceThresholdVals[A <: AnyVal](maxDistance : Double,
-                                          dist : (A,A) => Double): Similar[A] = {
+  def simByDistanceThresholdVals[A <: AnyVal](
+    maxDistance : Double,
+    dist : (A,A) => Double
+  ): Similar[A] = {
     new Similar[A] {
       override def similar(a1: A, a2: A): Double = {
         if (a1 == a2) {
@@ -72,12 +76,14 @@ object SimilarOps {
     }
   }
 
-  def simString(dist : (String,String) => Double,
-                maxDistance : (String, String) => Double = (_,_) => Double.MaxValue) = {
+  def simString(
+    dist : (String,String) => Double,
+    maxDistance : (String, String) => Double = (_,_) => Double.MaxValue) = {
     simByDistanceThresholdRefs[String](
       (a, b) => Math.max(a.length, b.length),
       dist,
-      _.isEmpty)
+      _.isEmpty
+    )
   }
 
   def intersectUnionSize[A](lhs: TraversableOnce[A], rhs: TraversableOnce[A]) : (Int,Int) = {
@@ -115,14 +121,6 @@ object SimilarOps {
     val union = intersect + symDiff
     (intersect, union)
   }
-
-  implicit def similarTraversableOnce[A,M[AA] <: TraversableOnce[AA]] =
-    new Similar[M[A]] {
-        override def similar(a1: M[A], a2: M[A]): Double = {
-        val (intersectSize,unionSize) = intersectUnionSize(a1,a2)
-        intersectSize.toDouble/unionSize
-      }
-    }
 
   def cartesianProduct[A](
     ma1: IndexedSeq[A],
