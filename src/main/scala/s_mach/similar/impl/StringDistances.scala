@@ -1,4 +1,4 @@
-package s_mach.similar
+package s_mach.similar.impl
 
 object StringDistances {
   // http://en.wikipedia.org/wiki/Levenshtein_distance

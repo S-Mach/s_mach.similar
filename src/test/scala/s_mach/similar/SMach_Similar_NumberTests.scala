@@ -5,8 +5,9 @@ package s_mach.similar
 import s_mach.similar.TestObjects._
 import org.scalatest.{FlatSpec,Matchers}
 import breeze.linalg.DenseMatrix
-import s_mach.similar.relative.Shingler
-import s_mach.similar.relative.SimilarOps._
+import s_mach.similar.impl.SimilarOps
+import SimilarOps._
+import s_mach.similar.shingle.Shingler
 
 class SMach_Similar_NumberTests extends FlatSpec with Matchers {
 

@@ -2,8 +2,9 @@ package s_mach.similar
 import org.scalatest.{FlatSpec,Matchers}
 import breeze.linalg.{DenseVector, DenseMatrix}
 import s_mach.similar.TestObjects._
-import s_mach.similar.relative.Shingler
-import s_mach.similar.relative.SimilarOps._
+import s_mach.similar.impl.{StringDistances, SimilarOps}
+import SimilarOps._
+import s_mach.similar.shingle.Shingler
 import s_mach.string.WordSplitter
 
 class SMach_Similar_StringTests extends FlatSpec with Matchers {

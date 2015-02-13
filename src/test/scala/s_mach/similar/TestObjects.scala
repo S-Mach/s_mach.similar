@@ -1,8 +1,8 @@
 package s_mach.similar
 
 import breeze.linalg.DenseVector
-import s_mach.similar.relative.SimilarOps
-import s_mach.similar.metric.MetricOps._
+import s_mach.similar.impl.{StringDistances, SimilarOps}
+import s_mach.similar.impl.MetricOps._
 
 object TestObjects {
 

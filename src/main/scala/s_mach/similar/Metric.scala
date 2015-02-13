@@ -1,4 +1,4 @@
-package s_mach.similar.metric
+package s_mach.similar
 
 import breeze.linalg.DenseVector
 

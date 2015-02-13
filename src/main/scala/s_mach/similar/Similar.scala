@@ -1,6 +1,7 @@
-package s_mach.similar.relative
+package s_mach.similar
 
 import breeze.linalg._
+import s_mach.similar.impl.SimilarOps
 
 /**
  * Utility trait for being able to differentiate instances of A's
@@ -29,15 +30,11 @@ trait Similar[A] {
    * @param ma2 Vector of A's
    * @return Similarity Matrix
    */
-  def cartesianProduct(ma1: DenseVector[A], ma2: DenseVector[A]) : DenseMatrix[Double] = {
-    val matrix = new DenseMatrix[Double](ma1.length, ma2.length)
-    for(r <- 0 until ma1.length;
-        c <- 0 to (r * ma2.length/ma1.length)) {
-        matrix(r,c) = similar(ma1(r), ma2(c))
-        matrix(c,r) = matrix(r,c)
-    }
-    matrix
-  }
+  def cartesianProduct(
+    ma1: DenseVector[A],
+    ma2: DenseVector[A]
+  ) : DenseMatrix[Double] =
+    SimilarOps.cartesianProduct(ma1,ma1,similar)
 
   /**
    * Computes the similarity matrix of a vector of A's with itself
@@ -46,15 +43,8 @@ trait Similar[A] {
    * @param ma Vector of A's
    * @return Similarity Matrix
    */
-  def selfCartesianProduct(ma: DenseVector[A]) : DenseMatrix[Double] = {
-    val matrix = new DenseMatrix[Double](ma.length, ma.length)
-    for(r <- 0 until ma.length;
-        c <- 0 to r) {
-      if(r == c) matrix(r,c) = 1.0 else {
-        matrix(r,c) = similar(ma(r), ma(c))
-        matrix(c,r) = matrix(r,c)
-      }
-    }
-    matrix
-  }
+  def selfCartesianProduct(
+    ma: DenseVector[A]
+  ) : DenseMatrix[Double] =
+    SimilarOps.selfCartesianProduct(ma,similar)
 }

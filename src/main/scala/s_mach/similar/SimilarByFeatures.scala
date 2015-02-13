@@ -1,6 +1,4 @@
-package s_mach.similar.relative
-
-import s_mach.similar._
+package s_mach.similar
 
 /**
  * A class for computing the similarity between two instances of a type by 
@@ -14,4 +12,19 @@ case class SimilarByFeatures[A,F:Similar](features: A => F) extends Similar[A] {
   override def similar(a1: A, a2: A): Double = {
     features(a1) similar features(a2)
   }
+
+  // TODO: figure out CanMapValues typeclass
+//  override def cartesianProduct(
+//    ma1: DenseVector[A],
+//    ma2: DenseVector[A]
+//  ): DenseMatrix[Double] = {
+//    ma1.map(features) cartesianProduct ma2.map(features)
+//  }
+//
+//
+//  override def selfCartesianProduct(
+//    ma: DenseVector[A]
+//  ): DenseMatrix[Double] = {
+//    ma.map(features).selfCartesianProduct
+//  }
 }
