@@ -16,7 +16,7 @@ object MetricOps {
   }
 
   def metricCentroid[A](
-    self: DenseVector[A]
+    self: IndexedSeq[A]
   )(implicit
     metric : Metric[A],
     aClassTag : ClassTag[A]

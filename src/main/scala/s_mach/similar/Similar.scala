@@ -31,8 +31,8 @@ trait Similar[A] {
    * @return Similarity Matrix
    */
   def cartesianProduct(
-    ma1: DenseVector[A],
-    ma2: DenseVector[A]
+    ma1: IndexedSeq[A],
+    ma2: IndexedSeq[A]
   ) : DenseMatrix[Double] =
     SimilarOps.cartesianProduct(ma1,ma1,similar)
 
@@ -44,7 +44,7 @@ trait Similar[A] {
    * @return Similarity Matrix
    */
   def selfCartesianProduct(
-    ma: DenseVector[A]
+    ma: IndexedSeq[A]
   ) : DenseMatrix[Double] =
     SimilarOps.selfCartesianProduct(ma,similar)
 }

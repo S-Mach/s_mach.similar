@@ -10,42 +10,32 @@ package object similar {
     val self: IndexedSeq[A]
   ) extends AnyVal {
     def toDenseVector(implicit
-      aClassTag : ClassTag[A]
+      aClassTag: ClassTag[A]
     ): DenseVector[A] = DenseVector[A](self.toArray)
-  }
-
-  implicit class SMach_Similar_PimpMyDenseVector[A](
-    val self: DenseVector[A]
-  ) extends AnyVal {
 
     def selfCartesianProduct(implicit
-      similar : Similar[A],
-      aClassTag : ClassTag[A]
-    ) : DenseMatrix[Double] =
+      similar: Similar[A],
+      aClassTag: ClassTag[A]
+    ): DenseMatrix[Double] =
       similar.selfCartesianProduct(self)
 
     def cartesianProduct(
-      other : DenseVector[A]
+      other: IndexedSeq[A]
     )(implicit
-      similar : Similar[A],
-      aClassTag : ClassTag[A]
-    ) : DenseMatrix[Double] =
+      similar: Similar[A],
+      aClassTag: ClassTag[A]
+    ): DenseMatrix[Double] =
       similar.cartesianProduct(self, other)
 
-    /**
+   /**
      * Returns the object most similar to all other objects
      * @param similar Similar of A's
      * @return A most similar to all other A's
      */
     def simCentroid(implicit
-      similar : Similar[A],
-      aClassTag : ClassTag[A]
-    ) : A = SimilarOps.simCentroid(self)
-
-    def metricCentroid(implicit
-      metric : Metric[A],
-      aClassTag : ClassTag[A]
-    ) : A = MetricOps.metricCentroid(self)
+      similar: Similar[A],
+      aClassTag: ClassTag[A]
+    ): A = SimilarOps.simCentroid(self)
 
     def simGroupBy[K](
       threshold: Double
@@ -53,20 +43,32 @@ package object similar {
       f: A => K
     )(implicit
       similar: Similar[K]
-    ) : Map[K, DenseVector[A]] = SimilarOps.simGroupBy(self, threshold)(f)
+    ): Map[K, IndexedSeq[A]] = SimilarOps.simGroupBy(self, threshold)(f)
+
+    def metricCentroid(implicit
+      metric: Metric[A],
+      aClassTag: ClassTag[A]
+    ): A = MetricOps.metricCentroid(self)
+  }
+
+  implicit class SMach_Similar_PimpMyDenseVector[A](
+    val self: DenseVector[A]
+  ) extends AnyVal {
+
+
   }
 
   implicit class SMach_Similar_PimpEverything[A](val self: A) extends AnyVal {
 
-    def similar(rhs: A)(implicit canSimilar: Similar[A]) : Double = {
+    def similar(rhs: A)(implicit canSimilar: Similar[A]): Double = {
       canSimilar.similar(self, rhs)
     }
 
-    def distance(rhs: A)(implicit metric : Metric[A]) = {
+    def distance(rhs: A)(implicit metric: Metric[A]) = {
       metric.distance(self, rhs)
     }
 
-    def position(implicit metric : Metric[A]) = {
+    def position(implicit metric: Metric[A]) = {
       metric position self
     }
 
