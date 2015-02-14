@@ -61,6 +61,10 @@ package object similar {
       canSimilar.similar(self, rhs)
     }
 
+    def ==~(rhs: A)(implicit canSimilar: Similar[A]): Double = {
+      canSimilar.similar(self, rhs)
+    }
+
     def distance(rhs: A)(implicit metric: Metric[A]) = {
       metric.distance(self, rhs)
     }

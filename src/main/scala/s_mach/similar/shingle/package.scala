@@ -9,6 +9,7 @@ package object shingle {
   // times for efficient cartesian product calc
   type Shingler[A,Shingle] = A => Traversable[Shingle]
 
+  // TODO: think about way to easily wrap a basic shingler to produce these
   type WeightedShingle[A] = (A,Int)
   type TypedWeightedShingle[A] = (Symbol,A,Int)
 

@@ -1,7 +1,5 @@
 package s_mach.similar.impl
 
-import s_mach.similar.{Similar, SimilarByFeatures}
-
 import scala.annotation.tailrec
 import s_mach.similar.shingle._
 import s_mach.string._
@@ -112,4 +110,23 @@ object ShingleOps {
   def docStringShingler(implicit splitter:WordSplitter) : Shingler[String,String] =
     (_:String).wordShingles(3 to 4).map(_.mkString("|")).toIndexedSeq
 
+  // TODO: first/last gram shingler
+  // TODO: optimal list of words shingler that adjusts k_range depending on number of words
+  // TODO: optimal single word shingler that shingles forward/reverse 2-chargram first/last chargrams
+
+  // Select the 2 most min hash codes and pack them into a long
+  def minHash2(hashedValues: Traversable[Int]) : Long =
+    // TODO
+    ???
+
+  // Select the N most min hash codes and pack them into a string of fixed width
+  def minHashN(hashedValues: Traversable[Int], n: Int) : String = {
+    // sort
+    // convert int to bytes
+    // encode hex bytes to string
+    // expected string length = n * max_hexstring_length_of_int
+    // if string length < expected string length pad with leading 0s to preserve string sort order
+    // TODO
+    ???
+  }
 }
