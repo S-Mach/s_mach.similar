@@ -1,5 +1,7 @@
 package s_mach.similar.impl
 
+import s_mach.similar.{Similar, SimilarByFeatures}
+
 import scala.annotation.tailrec
 import s_mach.similar.shingle._
 import s_mach.string._
@@ -102,5 +104,12 @@ object ShingleOps {
     toGrams: A => IndexedSeq[Gram]
   ) : Iterator[IndexedSeq[Gram]] =
     toGrams(a).ksliding(k_range)
+
+  def shortStringShingler : Shingler[String,String] =
+    (_:String).charShingles(2 to 3).toIndexedSeq
+
+  // TODO: stemming & lemmatization see http://www.thoughtly.co/blog/working-with-text/
+  def docStringShingler(implicit splitter:WordSplitter) : Shingler[String,String] =
+    (_:String).wordShingles(3 to 4).map(_.mkString("|")).toIndexedSeq
 
 }

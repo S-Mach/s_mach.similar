@@ -1,9 +1,8 @@
 package s_mach.similar
 
 import scala.language.higherKinds
-import s_mach.similar._
-import s_mach.similar.shingle._
 import impl.SimilarOps._
+import impl.ShingleOps._
 
 // http://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient
 object DiceCoefficient {
@@ -17,15 +16,12 @@ object DiceCoefficient {
     }
 
   object ShortString {
-    val stringShingler = (_:String).charShingles(2 to 3).toIndexedSeq
+    val stringShingler = shortStringShingler
     implicit val stringSimilar = SimilarByFeatures(stringShingler)
   }
 
   object DocString {
-    import s_mach.string.WordSplitter.Whitespace
-
-    // TODO: stemming & lemmatization see http://www.thoughtly.co/blog/working-with-text/
-    val stringShingler = (_:String).wordShingles(3 to 4).map(_.mkString("|")).toIndexedSeq
+    val stringShingler = docStringShingler(s_mach.string.WordSplitter.Whitespace)
     implicit val stringSimilar = SimilarByFeatures(stringShingler)
   }
 
