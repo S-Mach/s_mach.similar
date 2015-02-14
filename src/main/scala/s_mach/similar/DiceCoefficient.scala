@@ -9,8 +9,7 @@ object DiceCoefficient {
   implicit def similarTraversable[A,M[AA] <: Traversable[AA]] =
     new Similar[M[A]] {
         override def similar(a1: M[A], a2: M[A]): Double = {
-        // TODO: create slightly more efficient function that only computes intersect size
-        val (intersectSize,_) = intersectUnionSize(a1,a2)
+        val intersectSize = calcMultisetIntersectSize(a1,a2)
         (intersectSize.toDouble * 2)/(a1.size + a2.size)
       }
     }

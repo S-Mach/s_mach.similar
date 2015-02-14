@@ -86,40 +86,68 @@ object SimilarOps {
     )
   }
 
-  def intersectUnionSize[A](lhs: TraversableOnce[A], rhs: TraversableOnce[A]) : (Int,Int) = {
-    class Total(mod: Int) {
-      var balance = mod
+//  def calcMultisetIntersectUnionSize[A](lhs: TraversableOnce[A], rhs: TraversableOnce[A]) : (Int,Int) = {
+//    class Total(mod: Int) {
+//      var balance = mod
+//    }
+//    val lookup = mutable.Map.empty[A,Total]
+//    var intersect = 0
+//    var symDiff = 0
+//    lhs.foreach { a =>
+//      lookup.get(a) match {
+//        case Some(total) =>
+//          total.balance = total.balance + 1
+//        case None =>
+//          lookup.put(a,new Total(1))
+//      }
+//    }
+//    rhs.foreach { a =>
+//      lookup.get(a) match {
+//        case Some(total) =>
+//          if(total.balance > 1) {
+//            total.balance = total.balance - 1
+//            intersect = intersect + 1
+//          } else {
+//            intersect = intersect + 1
+//            lookup.remove(a)
+//          }
+//        case None =>
+//          symDiff = symDiff + 1
+//      }
+//    }
+//    lookup.valuesIterator.foreach { total =>
+//      symDiff += total.balance
+//    }
+//    val union = intersect + symDiff
+//    (intersect, union)
+//  }
+  def calcMultisetIntersectSize[A](lhs: Traversable[A], rhs: Traversable[A]) : Int = {
+    class Total {
+      var balance = 1
     }
     val lookup = mutable.Map.empty[A,Total]
     var intersect = 0
-    var symDiff = 0
     lhs.foreach { a =>
       lookup.get(a) match {
         case Some(total) =>
           total.balance = total.balance + 1
         case None =>
-          lookup.put(a,new Total(1))
+          lookup.put(a,new Total)
       }
     }
     rhs.foreach { a =>
       lookup.get(a) match {
         case Some(total) =>
+          intersect = intersect + 1
           if(total.balance > 1) {
             total.balance = total.balance - 1
-            intersect = intersect + 1
           } else {
-            intersect = intersect + 1
             lookup.remove(a)
           }
         case None =>
-          symDiff = symDiff + 1
       }
     }
-    lookup.valuesIterator.foreach { total =>
-      symDiff += total.balance
-    }
-    val union = intersect + symDiff
-    (intersect, union)
+    intersect
   }
 
   def cartesianProduct[A](

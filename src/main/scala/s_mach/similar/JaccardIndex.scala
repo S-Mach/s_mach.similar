@@ -9,7 +9,8 @@ object JaccardIndex {
   implicit def similarTraversable[A,M[AA] <: Traversable[AA]] =
     new Similar[M[A]] {
         override def similar(a1: M[A], a2: M[A]): Double = {
-        val (intersectSize,unionSize) = intersectUnionSize(a1,a2)
+        val intersectSize = calcMultisetIntersectSize(a1,a2)
+        val unionSize = a1.size + a2.size - intersectSize
         intersectSize.toDouble/unionSize
       }
     }
